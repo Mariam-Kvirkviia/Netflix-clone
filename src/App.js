@@ -1,12 +1,5 @@
-
-
 function App() {
-  return (
-    <div >
-      hello
-      
-    </div>
-  );
+  return <h1 className="text-red">vvvvb</h1>;
 }
 
 export default App;
