@@ -1,9 +1,11 @@
 import Navbar from "./components/Navbar";
 import { Fragment } from "react";
 import HomePage from "./pages/Home";
-import Sign from "./pages/Sign";
+import SignUp from "./pages/SignUp";
+import Account from "./pages/Account";
 import Main from "./components/Main";
 import Auth from "./pages/Auth";
+import LogIn from "./pages/LogIn";
 import { AuthContextProvider } from "./context/AuthContext";
 import { Switch, Route } from "react-router-dom";
 function App() {
@@ -15,7 +17,13 @@ function App() {
           <HomePage />
         </Route>
         <Route path="/sign" exact>
-          <Sign />
+          <SignUp />
+        </Route>
+        <Route path="/login" exact>
+          <LogIn />
+        </Route>
+        <Route path="/account" exact>
+          <Account />
         </Route>
       </Switch>
     </AuthContextProvider>
