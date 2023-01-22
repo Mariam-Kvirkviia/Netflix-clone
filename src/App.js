@@ -4,10 +4,11 @@ import HomePage from "./pages/Home";
 import Sign from "./pages/Sign";
 import Main from "./components/Main";
 import Auth from "./pages/Auth";
+import { AuthContextProvider } from "./context/AuthContext";
 import { Switch, Route } from "react-router-dom";
 function App() {
   return (
-    <Fragment>
+    <AuthContextProvider>
       <Navbar />
       <Switch>
         <Route path="/" exact>
@@ -17,8 +18,7 @@ function App() {
           <Sign />
         </Route>
       </Switch>
-    
-    </Fragment>
+    </AuthContextProvider>
   );
 }
 export default App;
