@@ -1,37 +1,77 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 let apiKey = "AIzaSyA4wtGrODPPnHrjrdA7oHHgHwHaI58u3qQ";
+
 let AuthContext = createContext({});
 export function AuthContextProvider({ children }) {
-  let [user, setUser] = useState({});
+  let [user, setUser] = useState(false);
+  let history = useHistory();
   function signUp(email, password) {
-    fetch(
+    return fetch(
       `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,
       {
         method: "POST",
-        body: {
+        body: JSON.stringify({
           email,
           password,
           returnSecureToken: true,
-        },
+        }),
       }
-    );
+    )
+      .then((response) => {
+        if (response.ok) {
+          history.replace("/");
+          setUser(true);
+        } else {
+          return response.json().then((data) => {
+            throw new Error("something went wrong!");
+          });
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
   function logIn(email, password) {
-    fetch(
-      `identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
+    console.log(email, password);
+    return fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
       {
         method: "POST",
-        body: {
+        body: JSON.stringify({
           email,
           password,
           returnSecureToken: true,
-        },
+        }),
       }
-    );
+    )
+      .then((response) => {
+        if (response.ok) {
+          history.replace("/");
+          setUser(true);
+        } else {
+          return response.json().then((data) => {
+            throw new Error("something went wrong!");
+          });
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
-  function logOut(email, password) {}
+  function logOut(email, password) {
+    return setUser(false);
+  }
   return (
-    <AuthContext.Provider value={(user, setUser, signUp, logIn, logOut)}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        signUp,
+        logIn,
+        logOut,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,43 +1,21 @@
 import React, { useState, useRef } from "react";
-import { useHistory } from "react-router-dom";
+
 import { UserAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
-let apiKey = "AIzaSyA4wtGrODPPnHrjrdA7oHHgHwHaI58u3qQ";
+
 const SignUp = () => {
-  let { user,setUser } = UserAuth();
+  let { signUp } = UserAuth();
   let passwordREF = useRef();
   let emailREF = useRef();
-  let history = useHistory();
+
   function handleForm(e) {
     e.preventDefault();
     let email = emailREF.current.value;
     let password = passwordREF.current.value;
-    fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          email,
-          password,
-          returnSecureToken: true,
-        }),
-      }
-    )
-      .then((response) => {
-        if (response.ok) {
-          history.replace("/");
-          console.log(user);
-        } else {
-          return response.json().then((data) => {
-            throw new Error(data?.error?.message || "something went wrong!");
-          });
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-    emailREF.current.value = "";
-    passwordREF.current.value = "";
+
+    signUp(email, password);
+    email = "";
+    password = "";
   }
   return (
     <div className="w-full h-screen">

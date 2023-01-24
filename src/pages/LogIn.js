@@ -1,6 +1,22 @@
-import React from "react";
+import React, { useState, useRef } from "react";
+
+import { UserAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+
+
 function LogIn() {
+  let { logIn } = UserAuth();
+  let passwordREF = useRef();
+  let emailREF = useRef();
+
+  function handleForm(e) {
+    e.preventDefault();
+    let email = emailREF.current.value;
+    let password = passwordREF.current.value;
+    logIn(email, password);
+    email = "";
+    password = "";
+  }
   return (
     <div className="w-full h-screen">
       <img
@@ -13,16 +29,18 @@ function LogIn() {
         <div className="max-w-[450px] h-[600px] mx-auto bg-black/75 text-white">
           <div className="max-w-[320px] mx-auto py-16">
             <h1 className="text-3xl font-bold">Sign in</h1>
-            <form>
+            <form onSubmit={handleForm}>
               <input
                 type="email"
                 placeholder="Email or phone number"
-                className=" my-[30px] w-full h-[50px] rounded-md bg-slate-100 p-2"
+                ref={emailREF}
+                className=" my-[30px] w-full h-[50px] rounded-md bg-slate-100 p-2 text-black"
               ></input>
               <input
                 type="password"
+                ref={passwordREF}
                 placeholder="Password"
-                className=" mb-[30px] w-full h-[50px] rounded-md bg-slate-100 p-2"
+                className=" mb-[30px] w-full h-[50px] rounded-md bg-slate-100 p-2 text-black"
               ></input>
               <button className="text-xl w-full bg-[#e50914] my-[10px] rounded-md p-[10px]">
                 Sign in

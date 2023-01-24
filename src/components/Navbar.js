@@ -13,11 +13,14 @@ const Navbar = () => {
       </Link>
       {user ? (
         <div>
-          <Link to="/login">
+          <Link to="/account">
             <button className="text-white pr-4">Account</button>
           </Link>
           <Link to="/sign">
-            <button className="bg-red-700 px-6 text-white py-2 rounded">
+            <button
+              className="bg-red-700 px-6 text-white py-2 rounded"
+              onClick={() => setUser(false)}
+            >
               Sign out
             </button>
           </Link>
