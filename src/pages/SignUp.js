@@ -1,6 +1,44 @@
-import React from "react";
+import React, { useState, useRef } from "react";
+import { useHistory } from "react-router-dom";
+import { UserAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+let apiKey = "AIzaSyA4wtGrODPPnHrjrdA7oHHgHwHaI58u3qQ";
 const SignUp = () => {
+  let { user,setUser } = UserAuth();
+  let passwordREF = useRef();
+  let emailREF = useRef();
+  let history = useHistory();
+  function handleForm(e) {
+    e.preventDefault();
+    let email = emailREF.current.value;
+    let password = passwordREF.current.value;
+    fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          password,
+          returnSecureToken: true,
+        }),
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          history.replace("/");
+          console.log(user);
+        } else {
+          return response.json().then((data) => {
+            throw new Error(data?.error?.message || "something went wrong!");
+          });
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    emailREF.current.value = "";
+    passwordREF.current.value = "";
+  }
   return (
     <div className="w-full h-screen">
       <img
@@ -13,16 +51,18 @@ const SignUp = () => {
         <div className="max-w-[450px] h-[600px] mx-auto bg-black/75 text-white">
           <div className="max-w-[320px] mx-auto py-16">
             <h1 className="text-3xl font-bold">Sign up</h1>
-            <form>
+            <form onSubmit={handleForm}>
               <input
                 type="email"
                 placeholder="Email or phone number"
-                className=" my-[30px] w-full h-[50px] rounded-md bg-slate-100 p-2"
+                className=" my-[30px] w-full h-[50px] rounded-md bg-slate-100 p-2 text-black"
+                ref={emailREF}
               ></input>
               <input
                 type="password"
+                ref={passwordREF}
                 placeholder="Password"
-                className=" mb-[30px] w-full h-[50px] rounded-md bg-slate-100 p-2"
+                className=" mb-[30px] w-full h-[50px] rounded-md bg-slate-100 p-2 text-black"
               ></input>
               <button className="text-xl w-full bg-[#e50914] my-[10px] rounded-md p-[10px]">
                 Sign up

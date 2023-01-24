@@ -16,20 +16,24 @@ export function AuthContextProvider({ children }) {
       }
     );
   }
-  function logIn(email, password) {  fetch(
-    `identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
-    {
-      method: "POST",
-      body: {
-        email,
-        password,
-        returnSecureToken: true,
-      },
-    }
-  );}
+  function logIn(email, password) {
+    fetch(
+      `identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
+      {
+        method: "POST",
+        body: {
+          email,
+          password,
+          returnSecureToken: true,
+        },
+      }
+    );
+  }
   function logOut(email, password) {}
   return (
-    <AuthContext.Provider value={AuthContext}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={(user, setUser, signUp, logIn, logOut)}>
+      {children}
+    </AuthContext.Provider>
   );
 }
 export function UserAuth() {
