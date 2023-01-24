@@ -1,9 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
+import { useHistory } from "react-router-dom";
 const Navbar = () => {
-  let { user, setUser } = UserAuth();
+  let { user, setUser, logOut } = UserAuth();
   console.log(user);
+  let history = useHistory();
+  let handleLoggingOut = async () => {
+    try {
+      await logOut();
+      history.replace("/");
+      setUser(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="flex items-center w-full p-4  absolute z-[100]  justify-between ">
       <Link to="/">
@@ -19,7 +30,7 @@ const Navbar = () => {
           <Link to="/sign">
             <button
               className="bg-red-700 px-6 text-white py-2 rounded"
-              onClick={() => setUser(false)}
+              onClick={handleLoggingOut}
             >
               Sign out
             </button>

@@ -1,22 +1,29 @@
 import React, { useState, useRef } from "react";
-
+import { useHistory } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
+import { auth } from "../firebase";
 import { Link } from "react-router-dom";
 
 const SignUp = () => {
-  let { signUp } = UserAuth();
+  let { signUp, setUser } = UserAuth();
   let passwordREF = useRef();
   let emailREF = useRef();
-
-  function handleForm(e) {
+  let history = useHistory();
+  let handleForm = async (e) => {
     e.preventDefault();
     let email = emailREF.current.value;
     let password = passwordREF.current.value;
-
-    signUp(email, password);
-    email = "";
-    password = "";
-  }
+    try {
+      await signUp(email, password);
+      email = "";
+      password = "";
+      history.replace("/");
+      setUser(true);
+    } catch (error) {
+      //setError
+      console.log(error);
+    }
+  };
   return (
     <div className="w-full h-screen">
       <img

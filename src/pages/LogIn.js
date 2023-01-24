@@ -1,22 +1,27 @@
 import React, { useState, useRef } from "react";
-
+import { useHistory } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
-
 function LogIn() {
-  let { logIn } = UserAuth();
+  let { logIn,setUser } = UserAuth();
   let passwordREF = useRef();
   let emailREF = useRef();
-
-  function handleForm(e) {
+let history = useHistory();
+  let handleForm = async (e) => {
     e.preventDefault();
     let email = emailREF.current.value;
     let password = passwordREF.current.value;
-    logIn(email, password);
-    email = "";
-    password = "";
-  }
+    try {
+      await logIn(email, password);
+      email = "";
+      password = "";
+      history.replace("/");
+      setUser(true)
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="w-full h-screen">
       <img
