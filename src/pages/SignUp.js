@@ -5,12 +5,14 @@ import { auth } from "../firebase";
 import { Link } from "react-router-dom";
 
 const SignUp = () => {
-  let { signUp, setUser } = UserAuth();
+  let { signUp } = UserAuth();
   let passwordREF = useRef();
   let emailREF = useRef();
   let history = useHistory();
+  let [isError, setError] = useState(null);
   let handleForm = async (e) => {
     e.preventDefault();
+    setError("");
     let email = emailREF.current.value;
     let password = passwordREF.current.value;
     try {
@@ -18,12 +20,12 @@ const SignUp = () => {
       email = "";
       password = "";
       history.replace("/");
-      setUser(true);
     } catch (error) {
-      //setError
+      setError(error.message);
       console.log(error);
     }
   };
+
   return (
     <div className="w-full h-screen">
       <img
@@ -36,6 +38,9 @@ const SignUp = () => {
         <div className="max-w-[450px] h-[600px] mx-auto bg-black/75 text-white">
           <div className="max-w-[320px] mx-auto py-16">
             <h1 className="text-3xl font-bold">Sign up</h1>
+            {isError ? (
+              <p className="mt-2 text-red-600 text-xl">{isError}</p>
+            ) : null}
             <form onSubmit={handleForm}>
               <input
                 type="email"

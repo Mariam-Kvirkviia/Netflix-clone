@@ -4,12 +4,14 @@ import { UserAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
 function LogIn() {
-  let { logIn,setUser } = UserAuth();
+  let { logIn } = UserAuth();
   let passwordREF = useRef();
   let emailREF = useRef();
-let history = useHistory();
+  let history = useHistory();
+  let [isError, setError] = useState(null);
   let handleForm = async (e) => {
     e.preventDefault();
+    setError("");
     let email = emailREF.current.value;
     let password = passwordREF.current.value;
     try {
@@ -17,8 +19,8 @@ let history = useHistory();
       email = "";
       password = "";
       history.replace("/");
-      setUser(true)
     } catch (error) {
+      setError(error.message);
       console.log(error);
     }
   };
@@ -34,6 +36,9 @@ let history = useHistory();
         <div className="max-w-[450px] h-[600px] mx-auto bg-black/75 text-white">
           <div className="max-w-[320px] mx-auto py-16">
             <h1 className="text-3xl font-bold">Sign in</h1>
+            {isError ? (
+              <p className="mt-2 text-red-600 text-xl">{isError}</p>
+            ) : null}
             <form onSubmit={handleForm}>
               <input
                 type="email"

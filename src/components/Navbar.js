@@ -4,7 +4,6 @@ import { UserAuth } from "../context/AuthContext";
 import { useHistory } from "react-router-dom";
 const Navbar = () => {
   let { user, setUser, logOut } = UserAuth();
-  console.log(user);
   let history = useHistory();
   let handleLoggingOut = async () => {
     try {
@@ -22,7 +21,7 @@ const Navbar = () => {
           NETFLIX
         </h1>
       </Link>
-      {user ? (
+      {user?.email ? (
         <div>
           <Link to="/account">
             <button className="text-white pr-4">Account</button>

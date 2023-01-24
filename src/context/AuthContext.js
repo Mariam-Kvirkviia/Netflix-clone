@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-
-import { auth } from "../firebase";
+import { setDoc, doc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -11,76 +11,29 @@ import {
 
 let AuthContext = createContext({});
 export function AuthContextProvider({ children }) {
-  let [user, setUser] = useState(false);
+  let [user, setUser] = useState({});
   let history = useHistory();
   function signUp(email, password) {
-    return createUserWithEmailAndPassword(auth, email, password);
-    //fetch(
-    //   `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,
-    //   {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       email,
-    //       password,
-    //       returnSecureToken: true,
-    //     }),
-    //   }
-    // )
-    //   .then((response) => {
-    //     if (response.ok) {
-    //       history.replace("/");
-    //       setUser(true);
-    //       fetch(
-    //         `https://netflix-c33ed-default-rtdb.firebaseio.com/netflix.json`,
-    //         {
-    //           method: "POST",
-    //           body: JSON.stringify({
-    //             id: email,
-    //             films: [],
-    //           }),
-    //         }
-    //       );
-    //     } else {
-    //       return response.json().then((data) => {
-    //         throw new Error("something went wrong!");
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
+    createUserWithEmailAndPassword(auth, email, password);
+    setDoc(doc(db, "users", email), {
+      savedShows: [],
+    });
   }
   function logIn(email, password) {
     return signInWithEmailAndPassword(auth, email, password);
-    // fetch(
-    //   `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
-    //   {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       email,
-    //       password,
-    //       returnSecureToken: true,
-    //     }),
-    //   }
-    // )
-    //   .then((response) => {
-    //     if (response.ok) {
-    //       history.replace("/");
-    //       setUser(true);
-    //     } else {
-    //       return response.json().then((data) => {
-    //         throw new Error("something went wrong!");
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
   }
-  function logOut(email, password) {
-    setUser(false);
+  function logOut() {
     return signOut(auth);
   }
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => {
+      unsubscribe();
+    };
+  });
   return (
     <AuthContext.Provider
       value={{
