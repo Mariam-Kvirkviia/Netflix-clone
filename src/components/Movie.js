@@ -3,6 +3,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 const Movie = (props) => {
   let movie = props.data;
   let [heart, setHeart] = useState(false);
+  let [saved, setSaved] = useState(false);
 
   return (
     <div className="w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2">

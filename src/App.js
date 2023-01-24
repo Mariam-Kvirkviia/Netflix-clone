@@ -1,10 +1,8 @@
 import Navbar from "./components/Navbar";
-import { Fragment } from "react";
 import HomePage from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import Account from "./pages/Account";
-import Main from "./components/Main";
-import Auth from "./pages/Auth";
+import ProtectedRoute from "./components/ProtectedRoute";
 import LogIn from "./pages/LogIn";
 import { AuthContextProvider } from "./context/AuthContext";
 import { Switch, Route } from "react-router-dom";
@@ -22,9 +20,11 @@ function App() {
         <Route path="/login" exact>
           <LogIn />
         </Route>
-        <Route path="/account" exact>
-          <Account />
-        </Route>
+        <ProtectedRoute>
+          <Route path="/account" exact>
+            <Account />
+          </Route>
+        </ProtectedRoute>
       </Switch>
     </AuthContextProvider>
   );

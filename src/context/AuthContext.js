@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 let apiKey = "AIzaSyA4wtGrODPPnHrjrdA7oHHgHwHaI58u3qQ";
-
+import { auth } from "../firebase";
+import {cre} from "firebase/auth";
 let AuthContext = createContext({});
 export function AuthContextProvider({ children }) {
   let [user, setUser] = useState(false);
@@ -22,6 +23,16 @@ export function AuthContextProvider({ children }) {
         if (response.ok) {
           history.replace("/");
           setUser(true);
+          fetch(
+            `https://netflix-c33ed-default-rtdb.firebaseio.com/netflix.json`,
+            {
+              method: "POST",
+              body: JSON.stringify({
+                id: email,
+                films: [],
+              }),
+            }
+          );
         } else {
           return response.json().then((data) => {
             throw new Error("something went wrong!");
@@ -33,7 +44,6 @@ export function AuthContextProvider({ children }) {
       });
   }
   function logIn(email, password) {
-    console.log(email, password);
     return fetch(
       `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
       {
