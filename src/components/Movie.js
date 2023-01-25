@@ -1,10 +1,29 @@
 import React, { useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { UserAuth } from "../context/AuthContext";
+import { db } from "../firebase";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 const Movie = (props) => {
   let movie = props.data;
   let [heart, setHeart] = useState(false);
   let [saved, setSaved] = useState(false);
-
+  let { user } = UserAuth();
+  let movieId = doc(db, "users", `${user?.email}`);
+  let saveShow = async () => {
+    if (user?.email) {
+      setHeart(!heart);
+      setSaved(true);
+      await updateDoc(movieId, {
+        savedShows: arrayUnion({
+          id: movie.id,
+          title: movie.title,
+          img: movie.backdrop_path,
+        }),
+      });
+    } else {
+      alert("Please log in to save a movie");
+    }
+  };
   return (
     <div className="w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2">
       {movie?.backdrop_path ? (
@@ -21,17 +40,19 @@ const Movie = (props) => {
           {movie?.title}
         </h3>
 
-        {!heart ? (
-          <FaRegHeart
-            className="absolute top-3 left-3"
-            onClick={() => setHeart(!heart)}
-          />
-        ) : (
-          <FaHeart
-            className="absolute top-3 left-3"
-            onClick={() => setHeart(!heart)}
-          />
-        )}
+        <p onClick={saveShow}>
+          {!heart ? (
+            <FaRegHeart
+              className="absolute top-3 left-3"
+              onClick={() => setHeart(!heart)}
+            />
+          ) : (
+            <FaHeart
+              className="absolute top-3 left-3"
+              onClick={() => setHeart(!heart)}
+            />
+          )}
+        </p>
       </div>
     </div>
   );
