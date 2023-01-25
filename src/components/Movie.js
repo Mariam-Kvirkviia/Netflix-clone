@@ -6,13 +6,13 @@ import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 const Movie = (props) => {
   let movie = props.data;
   let [heart, setHeart] = useState(false);
-  let [saved, setSaved] = useState(false);
+
   let { user } = UserAuth();
   let movieId = doc(db, "users", `${user?.email}`);
   let saveShow = async () => {
     if (user?.email) {
       setHeart(!heart);
-      setSaved(true);
+
       await updateDoc(movieId, {
         savedShows: arrayUnion({
           id: movie.id,
@@ -36,7 +36,7 @@ const Movie = (props) => {
         ""
       )}
       <div className="absolute top-0 left-0 w-full h-full hover:bg-black/80 opacity-0 hover:opacity-100 text-white">
-        <h3 className="flex justify-center items-center h-full">
+        <h3 className="flex justify-center items-center  h-full">
           {movie?.title}
         </h3>
 

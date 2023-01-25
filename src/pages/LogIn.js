@@ -55,13 +55,7 @@ function LogIn() {
               <button className="text-xl w-full bg-[#e50914] my-[10px] rounded-md p-[10px]">
                 Sign in
               </button>
-              <div className="text-gray-400 flex justify-between items-center">
-                <p>
-                  <input type="checkbox" className="" />
-                  <span className="ml-1 ">Remember me</span>
-                </p>
-                <p>Need help?</p>
-              </div>
+
               <div className="text-gray-400 flex justify-start items-center mt-6">
                 <p>New to Netflix?</p>
                 <Link to="/sign" className="text-white ml-1">
