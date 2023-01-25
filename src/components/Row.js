@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+
 import Movie from "./Movie";
 const Row = ({ title, fetchURL, rowId }) => {
   let [movies, setMovies] = useState([]);
