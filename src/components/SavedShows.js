@@ -10,6 +10,7 @@ function SavedShows() {
   let [movies, setMovies] = useState([]);
   let { user } = UserAuth();
   let scrollLeft = () => {
+    console.log(23);
     let left = document.getElementById("slider");
     left.scrollLeft = left.scrollLeft - 500;
   };
@@ -44,7 +45,10 @@ function SavedShows() {
           size={40}
           onClick={scrollLeft}
         />
-        <div className=" w-full h-full overflow-x-scroll whitespace-nowrap scrollbar-hide scroll-smooth">
+        <div
+          id="slider"
+          className=" w-full h-full overflow-x-scroll whitespace-nowrap scrollbar-hide scroll-smooth"
+        >
           {movies.map((movie, id) => {
             return (
               <div
